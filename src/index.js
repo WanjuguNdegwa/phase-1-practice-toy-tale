@@ -64,6 +64,10 @@ function addToyToDOM(toy, toyCollection) {
   button.classList.add('like-btn');
   button.setAttribute('id', toy.id);
   button.innerText = 'Like ❤️';
+  card.appendChild(button);
+
+  const p = button.previousElementSibling;
+  let currentLikes = parseInt(p.innerText.replace(/\D/g, ""))
 
   button.addEventListener('click', (e) => {
     fetch(`http://localhost:3000/toys/${toy.id}`, {
@@ -73,7 +77,7 @@ function addToyToDOM(toy, toyCollection) {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          "likes": toy.likes + 1
+          "likes": ++currentLikes
         })
       })
       .then((res) => {
@@ -82,11 +86,10 @@ function addToyToDOM(toy, toyCollection) {
         }
       })
       .then((res) => {
-        button.previousElementSibling.innerText = `${res.likes} likes`
+        p.innerText = `${currentLikes} Likes`
       })
   });
 
-  card.appendChild(button);
 
   toyCollection.appendChild(card);
 }
